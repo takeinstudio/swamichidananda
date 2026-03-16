@@ -88,6 +88,26 @@ const Admin = () => {
     refreshData();
   };
 
+  const handleFacultyPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === "string") {
+        setFacultyForm((prev) => ({ ...prev, photoUrl: result }));
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const editFaculty = (faculty: FacultyMember) => {
     setFacultyForm({
       id: faculty.id,
@@ -207,7 +227,27 @@ const Admin = () => {
                 <input required value={facultyForm.specialization} onChange={(e) => setFacultyForm((prev) => ({ ...prev, specialization: e.target.value }))} placeholder="Specialization" className="w-full px-3 py-2.5 rounded-lg bg-muted border border-border text-sm" />
                 <input required value={facultyForm.experience} onChange={(e) => setFacultyForm((prev) => ({ ...prev, experience: e.target.value }))} placeholder="Experience (e.g. 10 Years)" className="w-full px-3 py-2.5 rounded-lg bg-muted border border-border text-sm" />
                 <input required type="email" value={facultyForm.email} onChange={(e) => setFacultyForm((prev) => ({ ...prev, email: e.target.value }))} placeholder="Email" className="w-full px-3 py-2.5 rounded-lg bg-muted border border-border text-sm" />
-                <input value={facultyForm.photoUrl} onChange={(e) => setFacultyForm((prev) => ({ ...prev, photoUrl: e.target.value }))} placeholder="Photo URL (optional)" className="sm:col-span-2 w-full px-3 py-2.5 rounded-lg bg-muted border border-border text-sm" />
+                <div className="sm:col-span-2 space-y-2">
+                  <label className="block text-sm font-medium text-foreground">Browse and upload photo</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFacultyPhotoUpload}
+                    className="w-full px-3 py-2.5 rounded-lg bg-muted border border-border text-sm file:mr-3 file:px-3 file:py-1.5 file:rounded-md file:border-0 file:bg-primary file:text-primary-foreground file:cursor-pointer"
+                  />
+                  {facultyForm.photoUrl && (
+                    <div className="flex items-center justify-between gap-2 rounded-md border border-border bg-muted/40 px-3 py-2">
+                      <p className="text-xs text-muted-foreground">Photo selected</p>
+                      <button
+                        type="button"
+                        onClick={() => setFacultyForm((prev) => ({ ...prev, photoUrl: "" }))}
+                        className="text-xs text-red-600 hover:text-red-700"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <div className="sm:col-span-2 flex gap-2">
                   <button type="submit" className="btn-secondary text-sm px-5 py-2.5">
                     <Plus className="w-4 h-4 mr-1" /> {facultyForm.id ? "Update Faculty" : "Add Faculty"}
