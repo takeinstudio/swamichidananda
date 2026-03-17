@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, GraduationCap, User } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { isAdminAuthenticated, setAdminAuthenticated } from "@/lib/siteData";
@@ -11,10 +11,16 @@ const navLinks = [
   { label: "Faculty", href: "/faculty" },
   { label: "Facilities", href: "/facilities" },
   { label: "Events", href: "/events" },
+  { label: "Gallery", href: "/gallery" },
   { label: "Admissions", href: "/admissions" },
   { label: "Payments", href: "/payments" },
   { label: "Contact", href: "/contact" },
 ];
+
+const getPageTitle = (pathname: string) => {
+  const link = navLinks.find((l) => l.href === pathname);
+  return link ? link.label : "Page";
+};
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -25,6 +31,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const isHomePage = pathname === "/";
   const useLightHomeStyle = isHomePage && !scrolled;
+  const pageTitle = getPageTitle(pathname);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -58,14 +65,28 @@ const Navbar = () => {
       <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl gradient-primary-bg flex items-center justify-center">
-              <GraduationCap className="w-6 h-6 text-primary-foreground" />
+            <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/20 bg-white/90">
+              <img src="/marketing/logo.jpeg" alt="Swami Chidananda Institute logo" className="w-full h-full object-cover" loading="eager" />
             </div>
             <div className="hidden sm:block">
-              <span className={`font-heading font-bold text-sm leading-tight block ${scrolled ? "text-white" : useLightHomeStyle ? "text-white" : "text-foreground"}`}>
-                Swami Chidananda Institute of Social Sciences
-              </span>
-              <span className={`text-xs ${scrolled ? "text-white/70" : useLightHomeStyle ? "text-white/70" : "text-muted-foreground"}`}>Bhubaneswar</span>
+              {isHomePage ? (
+                <>
+                  <span className={`font-heading font-bold text-sm leading-tight block ${scrolled ? "text-white" : useLightHomeStyle ? "text-white" : "text-foreground"}`}>
+                    Swami Chidananda
+                  </span>
+                  <span className={`font-heading font-bold text-sm leading-tight block ${scrolled ? "text-white" : useLightHomeStyle ? "text-white" : "text-foreground"}`}>
+                    Institute of Social Sciences
+                  </span>
+                  <span className={`text-xs ${scrolled ? "text-white/70" : useLightHomeStyle ? "text-white/70" : "text-muted-foreground"}`}>Bhubaneswar</span>
+                </>
+              ) : (
+                <>
+                  <span className={`font-heading font-bold text-sm leading-tight block ${scrolled ? "text-white" : useLightHomeStyle ? "text-white" : "text-foreground"}`}>
+                    {pageTitle}
+                  </span>
+                  <span className={`text-xs ${scrolled ? "text-white/70" : useLightHomeStyle ? "text-white/70" : "text-muted-foreground"}`}>Swami Chidananda Institute</span>
+                </>
+              )}
             </div>
           </Link>
 

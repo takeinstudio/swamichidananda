@@ -1,0 +1,666 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0F0F14;
+    --surface: #1A1A24;
+    --surface2: #22222F;
+    --surface3: #2A2A3A;
+    --accent: #7C6EF8;
+    --accent2: #A78BFA;
+    --accent3: #C4B5FD;
+    --text: #F0EEFF;
+    --text2: #A09AC0;
+    --text3: #6B6490;
+    --green: #4ECCA3;
+    --red: #FF6B6B;
+    --amber: #FFB347;
+    --border: rgba(124,110,248,0.15);
+    --border2: rgba(124,110,248,0.08);
+    --glow: rgba(124,110,248,0.25);
+    --r: 16px;
+    --r-sm: 10px;
+  }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: #0a0a10;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  .phone {
+    width: 390px;
+    min-height: 844px;
+    background: var(--bg);
+    border-radius: 44px;
+    border: 1.5px solid rgba(124,110,248,0.2);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.04) inset, 0 0 60px rgba(124,110,248,0.08);
+  }
+
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 28px 8px;
+    font-size: 13px; font-weight: 600; color: var(--text2);
+    letter-spacing: 0.3px;
+  }
+
+  .notch {
+    width: 120px; height: 32px;
+    background: #000;
+    border-radius: 0 0 20px 20px;
+    margin: 0 auto;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+
+  .header {
+    padding: 20px 24px 16px;
+    animation: slideDown 0.5s ease;
+  }
+
+  .greeting {
+    font-size: 13px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase;
+    font-weight: 500; margin-bottom: 4px;
+  }
+
+  .title-row {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .main-title {
+    font-size: 28px; font-weight: 700; color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; color: white;
+    border: 2px solid rgba(124,110,248,0.3);
+  }
+
+  .stats-row {
+    display: flex; gap: 10px; padding: 0 24px 20px;
+    animation: slideDown 0.5s ease 0.1s both;
+  }
+
+  .stat-card {
+    flex: 1; background: var(--surface);
+    border-radius: var(--r-sm); padding: 12px;
+    border: 1px solid var(--border2);
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .stat-card:active { transform: scale(0.97); }
+
+  .stat-num {
+    font-size: 22px; font-weight: 700; color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-num.accent { color: var(--accent2); }
+  .stat-num.green { color: var(--green); }
+  .stat-num.amber { color: var(--amber); }
+
+  .stat-label {
+    font-size: 11px; color: var(--text3); margin-top: 3px;
+    font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  .filter-row {
+    display: flex; gap: 8px; padding: 0 24px 16px;
+    overflow-x: auto; scrollbar-width: none;
+    animation: slideDown 0.5s ease 0.15s both;
+  }
+
+  .filter-row::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    white-space: nowrap; transition: all 0.2s ease;
+    font-family: 'Sora', sans-serif;
+    color: var(--text2); background: transparent;
+  }
+
+  .filter-btn.active {
+    background: var(--accent); color: white; border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(124,110,248,0.4);
+  }
+
+  .filter-btn:not(.active):hover {
+    border-color: rgba(124,110,248,0.4); color: var(--text);
+  }
+
+  .add-input-wrap {
+    margin: 0 24px 16px;
+    background: var(--surface); border-radius: var(--r);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 4px 4px 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    animation: slideDown 0.5s ease 0.2s both;
+  }
+
+  .add-input-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--glow);
+  }
+
+  .add-input {
+    flex: 1; background: none; border: none; outline: none;
+    font-size: 14px; color: var(--text); font-family: 'Sora', sans-serif;
+    font-weight: 400;
+  }
+
+  .add-input::placeholder { color: var(--text3); }
+
+  .priority-btns { display: flex; gap: 4px; }
+
+  .prio-btn {
+    width: 26px; height: 26px; border-radius: 8px; border: 1px solid transparent;
+    font-size: 12px; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface2);
+    font-family: 'Sora', sans-serif;
+    color: var(--text2);
+  }
+
+  .prio-btn.selected-high { background: rgba(255,107,107,0.2); border-color: var(--red); color: var(--red); }
+  .prio-btn.selected-med { background: rgba(255,179,71,0.2); border-color: var(--amber); color: var(--amber); }
+  .prio-btn.selected-low { background: rgba(78,204,163,0.2); border-color: var(--green); color: var(--green); }
+
+  .add-btn {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; cursor: pointer; font-size: 20px; color: white;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(124,110,248,0.4);
+  }
+
+  .add-btn:active { transform: scale(0.92); }
+
+  .section-label {
+    padding: 0 24px 10px;
+    font-size: 11px; font-weight: 600; color: var(--text3);
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+
+  .tasks-list {
+    padding: 0 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    max-height: 480px; overflow-y: auto;
+    scrollbar-width: none; padding-bottom: 100px;
+  }
+
+  .tasks-list::-webkit-scrollbar { display: none; }
+
+  .task-item {
+    background: var(--surface); border-radius: var(--r);
+    border: 1px solid var(--border2);
+    padding: 14px 14px 14px 14px;
+    display: flex; align-items: center; gap: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer; position: relative; overflow: hidden;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .task-item::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    border-radius: 3px 0 0 3px; transition: all 0.2s;
+  }
+
+  .task-item.high::before { background: var(--red); }
+  .task-item.med::before { background: var(--amber); }
+  .task-item.low::before { background: var(--green); }
+  .task-item.none::before { background: var(--accent); }
+
+  .task-item:hover { border-color: var(--border); transform: translateY(-1px); }
+  .task-item.done { opacity: 0.5; }
+  .task-item.done .task-text { text-decoration: line-through; color: var(--text3); }
+
+  .check-btn {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid var(--border);
+    background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .check-btn.checked {
+    background: linear-gradient(135deg, var(--green), #2ecc90);
+    border-color: var(--green);
+    box-shadow: 0 4px 12px rgba(78,204,163,0.35);
+  }
+
+  .check-icon {
+    width: 10px; height: 7px; opacity: 0; transform: scale(0.5);
+    transition: all 0.2s ease;
+  }
+
+  .check-btn.checked .check-icon { opacity: 1; transform: scale(1); }
+
+  .task-content { flex: 1; min-width: 0; }
+
+  .task-text {
+    font-size: 14px; color: var(--text); font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    line-height: 1.4;
+  }
+
+  .task-meta {
+    display: flex; gap: 8px; align-items: center; margin-top: 4px;
+  }
+
+  .task-tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 6px;
+    font-weight: 500; letter-spacing: 0.3px;
+  }
+
+  .tag-work { background: rgba(124,110,248,0.15); color: var(--accent3); }
+  .tag-personal { background: rgba(78,204,163,0.15); color: var(--green); }
+  .tag-health { background: rgba(255,107,107,0.15); color: var(--red); }
+  .tag-finance { background: rgba(255,179,71,0.15); color: var(--amber); }
+  .tag-other { background: rgba(255,255,255,0.07); color: var(--text2); }
+
+  .task-time {
+    font-size: 11px; color: var(--text3); font-weight: 400;
+  }
+
+  .delete-btn {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: transparent; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; color: var(--text3);
+    font-size: 14px;
+  }
+
+  .delete-btn:hover { background: rgba(255,107,107,0.15); color: var(--red); }
+
+  .fab {
+    position: absolute; bottom: 32px; right: 28px;
+    width: 56px; height: 56px; border-radius: 18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; cursor: pointer; font-size: 24px; color: white;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(124,110,248,0.5);
+    transition: all 0.2s; z-index: 10;
+  }
+
+  .fab:active { transform: scale(0.92); }
+
+  .bottom-nav {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(15,15,20,0.95); backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border2);
+    display: flex; padding: 12px 0 28px;
+    border-radius: 0 0 44px 44px;
+  }
+
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    cursor: pointer; padding: 6px 0;
+    transition: all 0.2s;
+  }
+
+  .nav-icon { font-size: 20px; }
+  .nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text3); }
+  .nav-item.active .nav-label { color: var(--accent2); }
+  .nav-item.active .nav-icon { filter: drop-shadow(0 0 6px var(--accent)); }
+
+  .empty-state {
+    text-align: center; padding: 32px 0;
+    color: var(--text3); font-size: 14px;
+    display: none;
+  }
+
+  .empty-state.visible { display: block; }
+
+  .progress-ring {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; position: relative;
+  }
+
+  .ring-svg { transform: rotate(-90deg); }
+
+  .ring-bg { fill: none; stroke: var(--surface3); stroke-width: 3; }
+  .ring-fg { fill: none; stroke: url(#ringGrad); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes slideOut {
+    to { opacity: 0; transform: translateX(30px); max-height: 0; margin: 0; padding: 0; }
+  }
+
+  .removing { animation: slideOut 0.3s ease forwards; overflow: hidden; }
+
+  .adding { animation: bounceIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  .tag-select {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text2); font-size: 12px; font-family: 'Sora', sans-serif;
+    padding: 4px 8px; outline: none; cursor: pointer;
+  }
+
+  .tag-select option { background: var(--surface2); }
+
+  .toast {
+    position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 18px; font-size: 13px; color: var(--text);
+    opacity: 0; transition: all 0.3s ease; white-space: nowrap;
+    pointer-events: none; z-index: 100;
+  }
+
+  .toast.show {
+    opacity: 1; transform: translateX(-50%) translateY(0);
+  }
+</style>
+
+<div class="phone">
+  <div style="padding: 12px 28px 0; display: flex; justify-content: space-between; align-items: center;">
+    <span style="font-size: 13px; font-weight: 600; color: var(--text2);" id="clock">9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+        <rect x="0" y="4" width="3" height="8" rx="1" fill="#A09AC0"/>
+        <rect x="4.5" y="2.5" width="3" height="9.5" rx="1" fill="#A09AC0"/>
+        <rect x="9" y="0.5" width="3" height="11.5" rx="1" fill="#7C6EF8"/>
+        <rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="#7C6EF8"/>
+      </svg>
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
+        <rect x="0" y="1" width="15" height="10" rx="2" stroke="#A09AC0" stroke-width="1.2"/>
+        <rect x="16" y="3.5" width="2" height="5" rx="1" fill="#A09AC0"/>
+        <rect x="1.5" y="2.5" width="10" height="7" rx="1" fill="#4ECCA3"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="greeting">Monday, March 17</div>
+    <div class="title-row">
+      <div class="main-title">My Tasks</div>
+      <div class="avatar">A</div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num accent" id="stat-total">0</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num green" id="stat-done">0</div>
+      <div class="stat-label">Done</div>
+    </div>
+    <div class="stat-card" style="flex: 1.3; display: flex; align-items: center; justify-content: center; gap: 10px;">
+      <div class="progress-ring">
+        <svg class="ring-svg" width="44" height="44" viewBox="0 0 44 44">
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#4ECCA3"/>
+              <stop offset="100%" stop-color="#7C6EF8"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="22" cy="22" r="18"/>
+          <circle class="ring-fg" id="ring-fg" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+        </svg>
+        <span id="ring-pct" style="position: absolute; font-size: 11px; font-weight: 700; color: var(--text);">0%</span>
+      </div>
+      <div>
+        <div class="stat-num" style="font-size: 16px;" id="stat-remain">0</div>
+        <div class="stat-label">Left</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('active', this)">Active</button>
+    <button class="filter-btn" onclick="setFilter('done', this)">Done</button>
+    <button class="filter-btn" onclick="setFilter('high', this)">🔴 High</button>
+    <button class="filter-btn" onclick="setFilter('med', this)">🟡 Medium</button>
+    <button class="filter-btn" onclick="setFilter('low', this)">🟢 Low</button>
+  </div>
+
+  <div class="add-input-wrap">
+    <input class="add-input" id="new-task-input" placeholder="Add a new task..." maxlength="60"
+      onkeydown="if(event.key==='Enter') addTask()">
+    <select class="tag-select" id="tag-select">
+      <option value="work">Work</option>
+      <option value="personal">Personal</option>
+      <option value="health">Health</option>
+      <option value="finance">Finance</option>
+      <option value="other">Other</option>
+    </select>
+    <div class="priority-btns">
+      <button class="prio-btn" id="prio-high" onclick="setPrio('high')" title="High">H</button>
+      <button class="prio-btn" id="prio-med" onclick="setPrio('med')" title="Med">M</button>
+      <button class="prio-btn" id="prio-low" onclick="setPrio('low')" title="Low">L</button>
+    </div>
+    <button class="add-btn" onclick="addTask()">+</button>
+  </div>
+
+  <div class="section-label" id="section-label">Today's Tasks</div>
+
+  <div class="tasks-list" id="tasks-list"></div>
+
+  <div class="empty-state" id="empty-state">
+    <div style="font-size: 40px; margin-bottom: 8px;">✨</div>
+    <div style="font-weight: 600; color: var(--text2); margin-bottom: 4px;">All clear!</div>
+    <div>No tasks here yet.</div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">Tasks</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">📅</span>
+      <span class="nav-label">Calendar</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Stats</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Settings</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const TASKS = [
+  { id: 1, text: 'Finalize Q1 report draft', tag: 'work', prio: 'high', done: false, time: '9:00 AM' },
+  { id: 2, text: 'Team standup call', tag: 'work', prio: 'med', done: true, time: '10:30 AM' },
+  { id: 3, text: 'Grocery shopping run', tag: 'personal', prio: 'low', done: false, time: '1:00 PM' },
+  { id: 4, text: 'Morning yoga session', tag: 'health', prio: 'med', done: true, time: '7:00 AM' },
+  { id: 5, text: 'Pay electricity bill', tag: 'finance', prio: 'high', done: false, time: '5:00 PM' },
+  { id: 6, text: 'Review design mockups', tag: 'work', prio: 'med', done: false, time: '3:00 PM' },
+];
+
+let tasks = [...TASKS];
+let nextId = 10;
+let selectedPrio = 'none';
+let filter = 'all';
+
+const tagMap = { work: 'Work', personal: 'Personal', health: 'Health', finance: 'Finance', other: 'Other' };
+const prioMap = { high: 'High', med: 'Medium', low: 'Low', none: '' };
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function setPrio(p) {
+  selectedPrio = p;
+  ['high','med','low'].forEach(x => document.getElementById('prio-'+x).className = 'prio-btn');
+  if (p !== 'none') {
+    document.getElementById('prio-'+p).className = 'prio-btn selected-' + p;
+  }
+}
+
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTasks();
+  const labels = { all: "Today's Tasks", active: "Active Tasks", done: "Completed", high: "High Priority", med: "Medium Priority", low: "Low Priority" };
+  document.getElementById('section-label').textContent = labels[f] || "Tasks";
+}
+
+function getFiltered() {
+  return tasks.filter(t => {
+    if (filter === 'all') return true;
+    if (filter === 'active') return !t.done;
+    if (filter === 'done') return t.done;
+    return t.prio === filter;
+  });
+}
+
+function renderTasks(newId) {
+  const list = document.getElementById('tasks-list');
+  const filtered = getFiltered();
+  const empty = document.getElementById('empty-state');
+
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    empty.classList.add('visible');
+  } else {
+    empty.classList.remove('visible');
+    list.innerHTML = filtered.map(t => `
+      <div class="task-item ${t.prio} ${t.done ? 'done' : ''} ${t.id === newId ? 'adding' : ''}" id="task-${t.id}" onclick="toggleDone(${t.id}, event)">
+        <button class="check-btn ${t.done ? 'checked' : ''}" onclick="toggleDone(${t.id}, event)">
+          <svg class="check-icon" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 3L3.5 5.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="task-content">
+          <div class="task-text">${escHtml(t.text)}</div>
+          <div class="task-meta">
+            <span class="task-tag tag-${t.tag}">${tagMap[t.tag]}</span>
+            <span class="task-time">${t.time}</span>
+            ${t.prio !== 'none' ? `<span class="task-tag" style="background:rgba(255,255,255,0.05);color:var(--text3)">${prioMap[t.prio]}</span>` : ''}
+          </div>
+        </div>
+        <button class="delete-btn" onclick="deleteTask(${t.id}, event)">✕</button>
+      </div>
+    `).join('');
+  }
+
+  updateStats();
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toggleDone(id, event) {
+  event.stopPropagation();
+  const t = tasks.find(x => x.id === id);
+  if (t) {
+    t.done = !t.done;
+    renderTasks();
+    if (t.done) showToast('Task completed! 🎉');
+  }
+}
+
+function deleteTask(id, event) {
+  event.stopPropagation();
+  const el = document.getElementById('task-' + id);
+  if (el) {
+    el.classList.add('removing');
+    setTimeout(() => {
+      tasks = tasks.filter(x => x.id !== id);
+      renderTasks();
+      showToast('Task deleted');
+    }, 280);
+  }
+}
+
+function addTask() {
+  const input = document.getElementById('new-task-input');
+  const text = input.value.trim();
+  if (!text) { input.focus(); return; }
+  const tag = document.getElementById('tag-select').value;
+  const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
+  const time = `${h % 12 || 12}:${m.toString().padStart(2,'0')} ${h >= 12 ? 'PM' : 'AM'}`;
+  const newTask = { id: nextId++, text, tag, prio: selectedPrio, done: false, time };
+  tasks.unshift(newTask);
+  input.value = '';
+  setPrio('none');
+  if (filter !== 'done') {
+    renderTasks(newTask.id);
+    showToast('Task added ✨');
+  } else {
+    renderTasks();
+    showToast('Task added ✨');
+  }
+}
+
+function updateStats() {
+  const total = tasks.length;
+  const done = tasks.filter(t => t.done).length;
+  const remain = total - done;
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-done').textContent = done;
+  document.getElementById('stat-remain').textContent = remain;
+  document.getElementById('ring-pct').textContent = pct + '%';
+
+  const circ = 113.1;
+  const offset = circ - (circ * pct / 100);
+  document.getElementById('ring-fg').style.strokeDashoffset = offset;
+}
+
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
+  document.getElementById('clock').textContent = `${h}:${m.toString().padStart(2,'0')}`;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') addTask();
+});
+
+updateClock();
+setInterval(updateClock, 30000);
+renderTasks();
+</script>

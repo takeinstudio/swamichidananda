@@ -1,4 +1,3 @@
-import { GraduationCap } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import { useInView } from "framer-motion";
@@ -52,8 +51,8 @@ const Footer = () => {
               variants={scaleIn}
               className="flex items-center gap-3 mb-4"
             >
-              <div className="w-10 h-10 rounded-xl bg-primary-foreground/20 flex items-center justify-center">
-                <GraduationCap className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-primary-foreground/30 bg-primary-foreground/95">
+                <img src="/marketing/logo.jpeg" alt="Swami Chidananda Institute logo" className="w-full h-full object-cover" loading="lazy" />
               </div>
               <span className="font-heading font-bold text-sm">Swami Chidananda Institute of Social Sciences</span>
             </motion.div>

@@ -28,6 +28,34 @@ const ScrollToTop = () => {
   return null;
 };
 
+const PageTitle = () => {
+  const { pathname } = useLocation();
+  
+  const getTitleForPath = (path: string) => {
+    const titles: Record<string, string> = {
+      "/": "Home | Swami Chidananda Institute",
+      "/about": "About | Swami Chidananda Institute",
+      "/programs": "Programs | Swami Chidananda Institute",
+      "/faculty": "Faculty | Swami Chidananda Institute",
+      "/facilities": "Facilities | Swami Chidananda Institute",
+      "/events": "Events | Swami Chidananda Institute",
+      "/admissions": "Admissions | Swami Chidananda Institute",
+      "/payments": "Payments | Swami Chidananda Institute",
+      "/contact": "Contact | Swami Chidananda Institute",
+      "/admin": "Admin Dashboard | Swami Chidananda Institute",
+      "/admin-login": "Admin Login | Swami Chidananda Institute",
+      "/apply-now": "Apply Now | Swami Chidananda Institute",
+    };
+    return titles[path] || "Swami Chidananda Institute";
+  };
+
+  useEffect(() => {
+    document.title = getTitleForPath(pathname);
+  }, [pathname]);
+
+  return null;
+};
+
 const queryClient = new QueryClient();
 
 const SectionPageLayout = ({ children }: { children: ReactNode }) => (
@@ -54,6 +82,7 @@ const AppWithTracking = () => {
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <PageTitle />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route
